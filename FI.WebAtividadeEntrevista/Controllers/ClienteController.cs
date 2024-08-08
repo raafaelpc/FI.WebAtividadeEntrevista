@@ -44,7 +44,7 @@ namespace WebAtividadeEntrevista.Controllers
                 else
                 {
                     // Verifica se existe outro CPF igual e se é valido.
-                    if (ValitadeCPF.IsValidCPFClient(model))
+                    if (ValidateCPF.IsValidCPFClient(model))
                     {
                         Response.StatusCode = 400;
                         return Json("CPF inválido ou já cadastrado!!");
@@ -106,7 +106,7 @@ namespace WebAtividadeEntrevista.Controllers
                 else
                 {
 
-                    if (ValitadeCPF.IsValidCPFClient(model))
+                    if (ValidateCPF.IsValidCPFClient(model))
                     {
                         Response.StatusCode = 400;
                         return Json("CPF inválido ou já cadastrado!!");

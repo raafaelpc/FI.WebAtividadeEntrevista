@@ -3,7 +3,7 @@ using WebAtividadeEntrevista.Models;
 
 namespace FI.WebAtividadeEntrevista.Validators
 {
-    public sealed class ValitadeCPF
+    public sealed class ValidateCPF
     {
         public static bool IsValidCPFClient(ClienteModel model)
         {

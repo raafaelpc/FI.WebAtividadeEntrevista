@@ -33,7 +33,7 @@ namespace WebAtividadeEntrevista.Controllers
                 }
                 else
                 {
-                    if (ValitadeCPF.IsValidCPFBeneficiary(model))
+                    if (ValidateCPF.IsValidCPFBeneficiary(model))
                     {
                         Response.StatusCode = 400;
                         return Json("CPF inválido ou já cadastrado!!");
@@ -80,7 +80,7 @@ namespace WebAtividadeEntrevista.Controllers
                 {
                     Beneficiario beneficiario = boBeneficiario.Consultar(model.Id);
 
-                    if (beneficiario != null && beneficiario.CPF != model.CPF && ValitadeCPF.IsValidCPFBeneficiary(model))
+                    if (beneficiario != null && beneficiario.CPF != model.CPF && ValidateCPF.IsValidCPFBeneficiary(model))
                     {
                             Response.StatusCode = 400;
                             return Json("CPF inválido ou já cadastrado!!");

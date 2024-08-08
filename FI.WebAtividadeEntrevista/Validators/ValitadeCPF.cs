@@ -9,14 +9,14 @@ namespace FI.WebAtividadeEntrevista.Validators
         {
             BoCliente bo = new BoCliente();
 
-            return bo.ValidateExist(model.CPF, model.Id) || !bo.ValidateCheck(model.CPF);
+            return bo.ValidateExist(model.CPF, model.Id) && bo.ValidateCheck(model.CPF);
         }
 
         public static bool IsValidCPFBeneficiary(BeneficiarioModel model)
         {
             BoBeneficiario boBeneficiario = new BoBeneficiario();
 
-            return boBeneficiario.ValidateExist(model.CPF, model.Id) || !boBeneficiario.ValidateCheck(model.CPF);
+            return boBeneficiario.ValidateExist(model.CPF, model.Id) && boBeneficiario.ValidateCheck(model.CPF);
         }
     }
 }

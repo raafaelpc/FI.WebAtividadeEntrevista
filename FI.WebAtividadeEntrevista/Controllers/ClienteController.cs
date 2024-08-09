@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using FI.AtividadeEntrevista.DML;
 using System.Net;
+using System.ComponentModel.DataAnnotations;
 using FI.WebAtividadeEntrevista.Validators;
 
 namespace WebAtividadeEntrevista.Controllers
@@ -63,26 +64,18 @@ namespace WebAtividadeEntrevista.Controllers
                         Telefone = model.Telefone
                     });
 
-                    // Incluir Beneficiários
                     if (model.Beneficiarios != null && model.Beneficiarios.Any())
                     {
-                        foreach (var beneficiario in model.Beneficiarios)
+                        foreach (var Beneficiario in model.Beneficiarios)
                         {
-                            if (ValidateCPF.IsValidCPFBeneficiary(beneficiario))
-                            {
-                                Response.StatusCode = 400;
-                                return Json("CPF inválido ou já cadastrado para o beneficiário: " + beneficiario.Nome);
-                            }
-
                             boBeneficiario.Incluir(new Beneficiario
                             {
-                                Nome = beneficiario.Nome,
-                                CPF = beneficiario.CPF,
+                                Nome = Beneficiario.Nome,
+                                CPF = Beneficiario.CPF,
                                 IdCliente = model.Id
                             });
                         }
                     }
-
                     return Json("Cadastro efetuado com sucesso");
                 }
             }
@@ -93,7 +86,7 @@ namespace WebAtividadeEntrevista.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost]//Retorna as alterações
         public JsonResult Alterar(ClienteModel model)
         {
             try
@@ -112,6 +105,7 @@ namespace WebAtividadeEntrevista.Controllers
                 }
                 else
                 {
+
                     if (ValidateCPF.IsValidCPFClient(model))
                     {
                         Response.StatusCode = 400;
@@ -133,47 +127,6 @@ namespace WebAtividadeEntrevista.Controllers
                         Telefone = model.Telefone
                     });
 
-                    // Alterar Beneficiários
-                    if (model.Beneficiarios != null && model.Beneficiarios.Any())
-                    {
-                        foreach (var beneficiario in model.Beneficiarios)
-                        {
-                            if (beneficiario.Id == 0)
-                            {
-                                if (ValidateCPF.IsValidCPFBeneficiary(beneficiario))
-                                {
-                                    Response.StatusCode = 400;
-                                    return Json("CPF inválido ou já cadastrado para o beneficiário: " + beneficiario.Nome);
-                                }
-
-                                boBeneficiario.Incluir(new Beneficiario
-                                {
-                                    Nome = beneficiario.Nome,
-                                    CPF = beneficiario.CPF,
-                                    IdCliente = model.Id
-                                });
-                            }
-                            else
-                            {
-                                Beneficiario beneficiarioExistente = boBeneficiario.Consultar(beneficiario.Id);
-
-                                if (beneficiarioExistente != null && beneficiarioExistente.CPF != beneficiario.CPF && ValidateCPF.IsValidCPFBeneficiary(beneficiario))
-                                {
-                                    Response.StatusCode = 400;
-                                    return Json("CPF inválido ou já cadastrado!!");
-                                }
-
-                                boBeneficiario.Alterar(new Beneficiario
-                                {
-                                    Id = beneficiario.Id,
-                                    Nome = beneficiario.Nome,
-                                    CPF = beneficiario.CPF,
-                                    IdCliente = model.Id
-                                });
-                            }
-                        }
-                    }
-
                     return Json("Cadastro alterado com sucesso");
                 }
             }
@@ -184,32 +137,7 @@ namespace WebAtividadeEntrevista.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult DeletarBeneficiario(long id = 0)
-        {
-            try
-            {
-                BoBeneficiario boBeneficiario = new BoBeneficiario();
-
-                if (id == 0)
-                {
-                    Response.StatusCode = 400;
-                    return Json("Erro ao receber id do registro a remover");
-                }
-                else
-                {
-                    boBeneficiario.Excluir(id);
-                    return Json("Beneficiário removido com sucesso");
-                }
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 500;
-                return Json("Erro interno no servidor: " + ex.Message);
-            }
-        }
-
-        [HttpGet]
+        [HttpGet]//Retorna informações na tela
         public ActionResult Alterar(long id)
         {
             try
